@@ -16,7 +16,7 @@ class FeatherPlugin(BasePlugin):
         config2 = dict(config, docs_dir=root)
         assets = get_files(config2)
         for f in assets:
-            if "assets" in f.src_path:
+            if "assets" in f.src_path and (f.src_path.endswith(".js") or f.src_path.endswith(".css")):
                 files.append(f)
 
         extra_css = [
