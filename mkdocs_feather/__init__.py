@@ -11,24 +11,25 @@ class FeatherPlugin(BasePlugin):
         self.inject_assets(files, config)
 
     def inject_assets(self, files, config):
-        root = os.path.join(os.path.dirname(__file__), "assets")
+        root = os.path.join(os.path.dirname(__file__))
         docs_dir = config["docs_dir"]
         config2 = dict(config, docs_dir=root)
         assets = get_files(config2)
         for f in assets:
-            files.append(f)
+            if "assets" in f.src_path:
+                files.append(f)
 
         extra_css = [
-            'codemirror/lib/codemirror.css',
-            'mkdocs-feather/style.css'
+            'assets/mkdocs-feather/codemirror/lib/codemirror.css',
+            'assets/mkdocs-feather/feather.css'
         ]
         extra_javascript = [
             'https://code.jquery.com/jquery-3.6.0.min.js',
-            'codemirror/lib/codemirror.js',
-            'codemirror/addon/mode/simple.js',
-            'codemirror/mode/python/python.js',
-            'codemirror/keymap/sublime.js',
-            'mkdocs-feather/js/feather.js',
+            'assets/mkdocs-feather/codemirror/lib/codemirror.js',
+            'assets/mkdocs-feather/codemirror/addon/mode/simple.js',
+            'assets/mkdocs-feather/codemirror/mode/python/python.js',
+            'assets/mkdocs-feather/codemirror/keymap/sublime.js',
+            'assets/mkdocs-feather/feather.js',
         ]
 
         config['extra_css'] = extra_css + config['extra_css']
