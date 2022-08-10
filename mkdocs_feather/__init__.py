@@ -7,6 +7,9 @@ class FeatherPlugin(BasePlugin):
         self.add_markdown_extension(config, "fenced_code")
         return config
 
+    def _get_modes(self):
+        return self.config.get("modes") or ['python']
+
     def on_files(self, files, config):
         self.inject_assets(files, config)
 
@@ -27,8 +30,13 @@ class FeatherPlugin(BasePlugin):
             'assets/mkdocs-feather/jquery-3.6.0.min.js',
             'assets/mkdocs-feather/codemirror/lib/codemirror.js',
             'assets/mkdocs-feather/codemirror/addon/mode/simple.js',
-            'assets/mkdocs-feather/codemirror/mode/python/python.js',
             'assets/mkdocs-feather/codemirror/keymap/sublime.js',
+        ]
+
+        mode_js = 'assets/mkdocs-feather/codemirror/mode/{mode}/{mode}.js'
+        extra_javascript += [mode_js.format(mode=mode) for mode in self._get_modes()]
+
+        extra_javascript += [
             'assets/mkdocs-feather/feather.js',
         ]
 
