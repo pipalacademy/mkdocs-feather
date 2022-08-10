@@ -24,7 +24,7 @@ class FeatherPlugin(BasePlugin):
             'assets/mkdocs-feather/feather.css'
         ]
         extra_javascript = [
-            'https://code.jquery.com/jquery-3.6.0.min.js',
+            'assets/mkdocs-feather/jquery-3.6.0.min.js',
             'assets/mkdocs-feather/codemirror/lib/codemirror.js',
             'assets/mkdocs-feather/codemirror/addon/mode/simple.js',
             'assets/mkdocs-feather/codemirror/mode/python/python.js',
