@@ -4,7 +4,7 @@ Livecode integration for courses.
 
 To add a livecode example, use the following format.
 
-```{.python .example}
+```{.python .feather}
 print("hello, world!")
 ```
 
@@ -357,7 +357,6 @@ function setupExample(element) {
 
     setupRun() {
       var runtime = this.getRuntime();
-      var url = `${LIVECODE_BASE_URL}/runtimes/${runtime}`;
       var codemirror = this.codemirror;
 
       var editor = this;
@@ -380,6 +379,8 @@ function setupExample(element) {
         var args = editor.getArguments();
 
         editor.clearOutput();
+
+        var url = livecode.getLiveCodeURL(runtime);
 
         fetch(url, {
           method: "POST",
@@ -489,6 +490,18 @@ var livecode = {
 
   options: {},
 
+  isReady() {
+    return window.feather_config && window.feather_config.server_url && true;
+  },
+
+  getLiveCodeURL(runtime) {
+    if (!window.feather_config) {
+      return `/runtimes/${runtime}`;
+    }
+    var livecode_url = window.feather_config.server_url.replace(/\/?$/, '');
+    return `${livecode_url}/runtimes/${runtime}`;
+  },
+
   // can set mode, runtime, autopreview etc. for a language.
   setOptions(language, options) {
     this.options[language] = options;
@@ -506,6 +519,10 @@ var livecode = {
 
   setup() {
     var livecode = this;
+    if (!livecode.isReady()) {
+      console.log("feature_config is not setup. Livecode functionality may not work.");
+    }
+
     $(function() {
       $("pre.feather").each((i, e) => {
         var editor = setupExample(e);

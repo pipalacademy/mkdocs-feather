@@ -1,8 +1,15 @@
 from mkdocs.plugins import BasePlugin
 from mkdocs.structure.files import get_files
+from mkdocs.config.config_options import Type
 import os
+import json
 
 class FeatherPlugin(BasePlugin):
+    config_scheme = (
+        ('modes', Type(list, default=['python'])),
+        ('server_url', Type(str, default=''))
+    )
+
     def on_config(self, config, **kwargs):
         self.add_markdown_extension(config, "fenced_code")
         return config
@@ -12,6 +19,11 @@ class FeatherPlugin(BasePlugin):
 
     def on_files(self, files, config):
         self.inject_assets(files, config)
+
+    def on_page_content(self, html, page, config, files):
+        d = json.dumps(dict(server_url=self.config['server_url']))
+        feather_config = f'<script type="text/javascript">var feather_config = {d};</script>'
+        return html + feather_config
 
     def inject_assets(self, files, config):
         root = os.path.join(os.path.dirname(__file__))
