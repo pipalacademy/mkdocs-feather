@@ -1,3 +1,7 @@
-site_name: My Docs
+site_name: mkdocs-feather
 theme:
   name: material
+repo_url: https://github.com/pipalacademy/mkdocs-feather
+edit_uri: edit/main/docs/
+nav:
+  - Home: index.md
