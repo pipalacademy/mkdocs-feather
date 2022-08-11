@@ -381,16 +381,20 @@ function setupExample(element) {
         editor.clearOutput();
 
         var url = livecode.getLiveCodeURL(runtime);
-
-        fetch(url, {
-          method: "POST",
-          body: body,
-          headers: {'x-falcon-mode': mode, ...editor.getHeaders()}
-        })
-        .then(response => response.text())
-        .then(output => {
-          editor.showOutput(output);
-        });
+        if (url != null) {
+          fetch(url, {
+            method: "POST",
+            body: body,
+            headers: {'x-falcon-mode': mode, ...editor.getHeaders()}
+          })
+          .then(response => response.text())
+          .then(output => {
+            editor.showOutput(output);
+          });
+        }
+        else {
+          editor.showOutput("ERROR: Unable to execute code. The server_url is not configured.");
+        }
       });
     },
 
@@ -495,8 +499,8 @@ var livecode = {
   },
 
   getLiveCodeURL(runtime) {
-    if (!window.feather_config) {
-      return `/runtimes/${runtime}`;
+    if (!window.feather_config || !window.feather_config.server_url) {
+      return null;
     }
     var livecode_url = window.feather_config.server_url.replace(/\/?$/, '');
     return `${livecode_url}/runtimes/${runtime}`;
