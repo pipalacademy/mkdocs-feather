@@ -7,7 +7,7 @@ Live code execution for MkDocs using [Feather](https://github.com/pipalacademy/f
 In your markdown file, you can say:
 
 ~~~markdown
-```{ .feather .python }
+```{ .python .feather }
 print("Hello, World!")
 ```
 ~~~
@@ -15,7 +15,7 @@ print("Hello, World!")
 
 It will render as:
 
-```{ .feather .python }
+```{ .python .feather }
 print("Hello, World!")
 ```
 
