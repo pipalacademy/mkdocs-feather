@@ -231,7 +231,7 @@ function setupExample(element) {
       }
 
       if ("sourceFile" in this.options) {
-        this.options.env['FALCON_SOURCE_FILE'] = this.options.sourceFile;
+        this.options.headers["X-FEATHER-ENTRYPOINT"] = this.options.sourceFile;
       }
 
       if (this.element.hasClass("show-args")) {
@@ -347,10 +347,10 @@ function setupExample(element) {
       var headers = {...this.options.headers};
 
       if (Object.keys(this.options.env).length) {
-        headers['X-FALCON-ENV'] = editor.getEnvHeader();
+        headers['X-FEATHER-ENV'] = editor.getEnvHeader();
       }
       if (this.options.showArgs) {
-        headers['X-FALCON-ARGS'] = editor.getArguments();
+        headers['X-FEATHER-ARGS'] = editor.getArguments();
       }
       return headers;
     },
@@ -385,7 +385,7 @@ function setupExample(element) {
           fetch(url, {
             method: "POST",
             body: body,
-            headers: {'x-falcon-mode': mode, ...editor.getHeaders()}
+            headers: editor.getHeaders()
           })
           .then(response => response.text())
           .then(output => {

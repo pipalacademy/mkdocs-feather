@@ -1,4 +1,7 @@
 site_name: mkdocs-feather
+plugins:
+  - feather:
+      server_url: http://localhost:5000
 theme:
   name: material
 repo_url: https://github.com/pipalacademy/mkdocs-feather
