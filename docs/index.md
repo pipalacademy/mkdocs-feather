@@ -32,7 +32,7 @@ Add "mkdocs-feather" to plugins in your `mkdocs.yml` config.
 ```yml
 site_name: My Docs 
 plugins:
-    - mkdocs-feather
+    - feather
 ```
 
 ## Configuration
@@ -42,6 +42,6 @@ that map to particular syntax-highlighting classes or runtimes.
 
 ```yaml
 plugins:
-    - mkdocs-feather:
-        server_url: https://feather.pipal.in/
+    - feather:
+        server_url: https://feather-demo.herokuapp.com/
 ```
