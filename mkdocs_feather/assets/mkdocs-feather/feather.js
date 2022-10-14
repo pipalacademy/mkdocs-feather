@@ -73,8 +73,7 @@ var TEMPLATE = `
 </div>
 `
 
-function setupExample(element) {
-    console.log("setupExample", element);
+function setupExample(feather, element) {
   var editor = {
     element: $(element),
     editor: null,
@@ -214,7 +213,7 @@ function setupExample(element) {
 
       this.options = {
         ...this.options,
-        ...livecode.getOptions(lang),
+        ...feather.getOptions(lang),
         ...options
       };
       this.options.language = lang;
@@ -380,7 +379,7 @@ function setupExample(element) {
 
         editor.clearOutput();
 
-        var url = livecode.getLiveCodeURL(runtime);
+        var url = feather.getLiveCodeURL(runtime);
         if (url != null) {
           fetch(url, {
             method: "POST",
@@ -480,7 +479,7 @@ function setupExample(element) {
   return editor;
 }
 
-var livecode = {
+var feather = {
   editors: [],
   defaultOptions: {
     golang: {
@@ -522,19 +521,19 @@ var livecode = {
   },
 
   setup() {
-    var livecode = this;
-    if (!livecode.isReady()) {
+    var feather = this;
+    if (!feather.isReady()) {
       console.log("feature_config is not setup. Livecode functionality may not work.");
     }
 
     $(function() {
       $("pre.feather").each((i, e) => {
-        var editor = setupExample(e);
-        livecode.editors.push(editor);
+        var editor = setupExample(feather, e);
+        feather.editors.push(editor);
       });
     });
   }
 };
 
 
-livecode.setup();
+feather.setup();
