@@ -73,8 +73,7 @@ var TEMPLATE = `
 </div>
 `
 
-function setupExample(element) {
-    console.log("setupExample", element);
+function setupExample(feather, element) {
   var editor = {
     element: $(element),
     editor: null,
@@ -92,7 +91,8 @@ function setupExample(element) {
       env: {},
       events: {},
       headers: {},
-      args: ''
+      args: '',
+      renderOutput: null // function to render output
     },
 
     buffers: [],
@@ -214,10 +214,14 @@ function setupExample(element) {
 
       this.options = {
         ...this.options,
-        ...livecode.getOptions(lang),
+        ...feather.getOptions(lang),
         ...options
       };
       this.options.language = lang;
+
+      if (this.options.renderOutput == null) {
+        this.options.renderOutput = this.renderOutputSimple
+      }
 
       if (this.element.hasClass("autopreview")) {
         this.options.autopreview = true;
@@ -380,7 +384,7 @@ function setupExample(element) {
 
         editor.clearOutput();
 
-        var url = livecode.getLiveCodeURL(runtime);
+        var url = feather.getLiveCodeURL(runtime);
         if (url != null) {
           fetch(url, {
             method: "POST",
@@ -445,11 +449,19 @@ function setupExample(element) {
 
     showOutput(output) {
       $(this.editor).find(".output-wrapper").show();
-      $(this.editor).find(".output").text(output);
+      this.options.renderOutput(this.editor, output);
 
       for (var i=0; i < this.outputHooks.length; i++) {
         this.outputHooks[i](output);
       }
+    },
+
+    // This function is the default value of renderOutput option.
+    // shows the output as plain text.
+    // It is possible to provide a different implementation to render
+    // the output with more styles.
+    renderOutputSimple(editor, output) {
+      $(editor).find(".output").text(output);
     },
 
     clearOutput() {
@@ -480,7 +492,7 @@ function setupExample(element) {
   return editor;
 }
 
-var livecode = {
+var feather = {
   editors: [],
   defaultOptions: {
     golang: {
@@ -522,19 +534,19 @@ var livecode = {
   },
 
   setup() {
-    var livecode = this;
-    if (!livecode.isReady()) {
+    var feather = this;
+    if (!feather.isReady()) {
       console.log("feature_config is not setup. Livecode functionality may not work.");
     }
 
     $(function() {
       $("pre.feather").each((i, e) => {
-        var editor = setupExample(e);
-        livecode.editors.push(editor);
+        var editor = setupExample(feather, e);
+        feather.editors.push(editor);
       });
     });
   }
 };
 
 
-livecode.setup();
+feather.setup();
