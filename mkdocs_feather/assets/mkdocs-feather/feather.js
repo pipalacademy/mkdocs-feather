@@ -91,7 +91,8 @@ function setupExample(feather, element) {
       env: {},
       events: {},
       headers: {},
-      args: ''
+      args: '',
+      renderOutput: null // function to render output
     },
 
     buffers: [],
@@ -217,6 +218,10 @@ function setupExample(feather, element) {
         ...options
       };
       this.options.language = lang;
+
+      if (this.options.renderOutput == null) {
+        this.options.renderOutput = this.renderOutputSimple
+      }
 
       if (this.element.hasClass("autopreview")) {
         this.options.autopreview = true;
@@ -444,11 +449,19 @@ function setupExample(feather, element) {
 
     showOutput(output) {
       $(this.editor).find(".output-wrapper").show();
-      $(this.editor).find(".output").text(output);
+      this.options.renderOutput(this.editor, output);
 
       for (var i=0; i < this.outputHooks.length; i++) {
         this.outputHooks[i](output);
       }
+    },
+
+    // This function is the default value of renderOutput option.
+    // shows the output as plain text.
+    // It is possible to provide a different implementation to render
+    // the output with more styles.
+    renderOutputSimple(editor, output) {
+      $(editor).find(".output").text(output);
     },
 
     clearOutput() {
