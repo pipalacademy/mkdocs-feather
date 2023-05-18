@@ -60,11 +60,11 @@ var TEMPLATE = `
     </div>
     <div class="tabs" id="output-tabs">
       <button class="tab-link tab-preview" data-target=".tab-content-preview">Preview</button>
-      <button class="tab-link tab-output active" data-target=".tab-content-output">Output</button>
     </div>
 
-    <div class="output-wrapper tab-content tab-content-output">
-      <pre class="output"></pre>
+    <div class="output-wrapper">
+      <div class="spinner" style="display: none;"></div>
+      <pre class="output" stype="display: none;"></pre>
     </div>
     <div class="preview tab-content tab-content-preview">
       <iframe frameborder="0" ></iframe>
@@ -383,6 +383,7 @@ function setupExample(feather, element) {
         var args = editor.getArguments();
 
         editor.clearOutput();
+        editor.showSpinner();
 
         var url = feather.getLiveCodeURL(runtime);
         if (url != null) {
@@ -391,10 +392,11 @@ function setupExample(feather, element) {
             body: body,
             headers: editor.getHeaders()
           })
-          .then(response => response.text())
-          .then(output => {
-            editor.showOutput(output);
-          });
+            .then(response => response.text())
+            .then(output => {
+              editor.hideSpinner();
+              editor.showOutput(output);
+            });
         }
         else {
           editor.showOutput("ERROR: Unable to execute code. The server_url is not configured.");
